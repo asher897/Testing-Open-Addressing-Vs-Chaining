@@ -12,6 +12,7 @@ public class Linear extends HashTable {
 	}
 
 	public int find(String date) throws Exception {
+		//System.out.println(date);
 		int hash = hashCode(date)%tableSize;
 		//System.out.println(hash);
 
