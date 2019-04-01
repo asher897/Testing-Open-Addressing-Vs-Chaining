@@ -17,6 +17,7 @@ public class Linear extends HashTable {
 		//System.out.println(hash);
 
 		while(hashTable[hash] != null) {
+			probe++;
 			if(hashTable[hash].getDate().equals(date)) {
 				return hash;
 			}
@@ -31,7 +32,7 @@ public class Linear extends HashTable {
 		int hash = hashCode(data.getDate())%tableSize;
 		if(loadFactor != 1) {
 			while(hashTable[hash] != null) {
-				probe++;
+				inserts++;
 				hash = (hash+1)%tableSize;
 			}
 			hashTable[hash] = data;
