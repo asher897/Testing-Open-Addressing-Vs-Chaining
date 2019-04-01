@@ -9,49 +9,49 @@ public class Quadratic extends HashTable{
 	}
 
 	public int find(String date) throws Exception {
-		int hash = date.hashCode()%tableSize;
+		int hash = hashCode(date)%tableSize;
 		int current = hash;
 		int i = 1;
 
 		while(hashTable[current] != null) {
-			current = Math.floorMod((current + i<<1 -1),tableSize);
-			i++;
+			probe++;
 			if(hashTable[current].getDate().equals(date)) {
 				return current;
 			}
+			current = (current + 2*i -1)%tableSize;
+			i++;
 		}
 		System.out.println("Item does not exist");
 		throw NoSuchElementException;
 	}
 
 	public void insert(HashEntry data) throws Exception{
-		probe = 0;
 		int hash = hashCode(data.getDate())%tableSize;
-		int current = find(data.getDate());
+		int current = hash;
 		int i = 1;
-		if(hashTable[current].isActive()) {
-			System.out.println("Already exists");
-			return;
-		}
 		if(loadFactor != 1) {
-			current = hash;
-			while(hashTable[hash] != null) {
-				probe++;
+			while(hashTable[current] != null) {
+				//System.out.println(probe);
+				inserts++;
 				if(probe>=tableSize) {
-					System.out.println("Table is full");
-					throw TableFullException;
+					//System.out.println("36");
+					System.out.println("Probe above table size");
+					return;
 				}
-				current = Math.floorMod((current + i<<1 -1),tableSize);
+				current = (current + 2*i -1)%tableSize;
 				i++;
 				if(hash>=tableSize) {
 					hash = 0;
 				}
 			}
-			hashTable[hash] = data;
+			hashTable[current] = data;
 			currentSize++;
+			//System.out.println(currentSize);
+			//System.out.println("Inserted");
 		}else {
+			//System.out.println("49");
 			System.out.println("Table is full");
-			throw TableFullException;}
+			return;}
 
 
 
