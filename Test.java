@@ -25,6 +25,7 @@ public class Test {
 		String file = inputs.next();
 		System.out.println("Specify the number of keys you wish to search for: ");
 		int keys = Integer.parseInt(inputs.next());
+
 		if(hashType.toLowerCase().equals("linear")) {
 			hash = new Linear(tableSize);
 		}
@@ -73,7 +74,7 @@ public class Test {
 		while(!(searches<0)) {
 			if(shuffled[k] != null){
 				searchArr[searches] = shuffled[k];
- 			 	System.out.println(searchArr[searches]);
+ 			 	//System.out.println(searchArr[searches]);
  			 	searches--;
 			}
 			 k++;
