@@ -11,119 +11,286 @@ import java.io.IOException;
 
 public class Main {
 	public static void main(String[] args) throws Exception {
-		BufferedWriter results = new BufferedWriter(new FileWriter("Results.csv", true));
-
-		HashTable hash = null;
 		Scanner inputs = new Scanner(System.in);
-		System.out.println("Specify table size: ");
-		int tableSize = Integer.parseInt(inputs.next());
-		System.out.println("Specify Hash type: ");
-		String hashType = inputs.next();
-		while (!(hashType.toLowerCase().equals("linear") || hashType.toLowerCase().equals("quadratic")
-				|| hashType.toLowerCase().equals("chaining"))) {
-			System.out.println("Invalid table, Please try again.");
-			hashType = inputs.next();
-		}
-		System.out.println("Specify the input data file followed by the file type (e.g. cleaned_data.csv): ");
-		String file = inputs.next();
-		while (!(new File(file).exists())) {
-			System.out.println("The specified file does not exist, please try again: ");
-			file = inputs.next();
-		}
-		System.out.println("Specify the number of keys you wish to search for: ");
-		int keys = Integer.parseInt(inputs.next());
+		System.out.println("Please choose which programme to run: ");
+		System.out.println("1. Test results of specified HashTable.");
+		System.out.println("2. Test the Linear, Quadratic and Chaining HashTable results against each other.");
 
-		Linear linear = new Linear(tableSize);
+		int choice = inputs.nextInt();
 
-		Quadratic quad = new Quadratic(tableSize);
+		if (choice == 1) {
+			System.out.println("Specify table size: ");
+			int tableSize = Integer.parseInt(inputs.next());
+			System.out.println("Specify Hash type: ");
+			String hashType = inputs.next();
+			while (!(hashType.toLowerCase().equals("linear") || hashType.toLowerCase().equals("quadratic")
+					|| hashType.toLowerCase().equals("chaining"))) {
+				System.out.println("Invalid table, Please try again.");
+				hashType = inputs.next();
+			}
+			System.out.println("Specify the input data file followed by the file type (e.g. cleaned_data.csv): ");
+			String file = inputs.next();
+			while (!(new File(file).exists())) {
+				System.out.println("The specified file does not exist, please try again: ");
+				file = inputs.next();
+			}
+			System.out.println("Specify the number of keys you wish to search for: ");
+			int keys = Integer.parseInt(inputs.next());
+			HashTable table;
+			if (hashType.toLowerCase().equals("linear")) {
+				table = new Linear(tableSize);
+			} else if (hashType.toLowerCase().equals("quadratic")) {
+				table = new Quadratic(tableSize);
+			} else {
+				table = new Chaining(tableSize);
+			}
 
-		Chaining chain = new Chaining(tableSize);
-
-		Scanner data = new Scanner(new File(file));
-		data.nextLine();
-		data.useDelimiter(",");
-		String[] values = new String[3];
-		String[] dates = new String[600];
-		int d = 0;
-		HashEntry entry;
-
-		while (data.hasNextLine()) {
-			values[0] = data.next();
-			values[1] = data.next();
-			data.next();
-			values[2] = data.next();
-			entry = new HashEntry(values);
-			linear.insert(entry);
-			quad.insert(entry);
-			chain.insert(entry);
+			Scanner data = new Scanner(new File(file));
 			data.nextLine();
-			dates[d] = values[0];
-			d++;
-		}
+			data.useDelimiter(",");
+			String[] values = new String[3];
+			String[] dates = new String[600];
+			int d = 0;
+			HashEntry entry;
 
-		String[] search = new String[keys];
-
-		int searches = keys - 1;
-		List<String> dateList = Arrays.asList(dates);
-		Collections.shuffle(dateList);
-		String[] shuffled = dateList.toArray(dates);
-		String[] searchArr = new String[keys];
-		int k = 0;
-
-		while (!(searches < 0)) {
-			if (shuffled[k] != null) {
-				searchArr[searches] = shuffled[k];
-				searches--;
+			while (data.hasNextLine()) {
+				values[0] = data.next();
+				values[1] = data.next();
+				data.next();
+				values[2] = data.next();
+				entry = new HashEntry(values);
+				table.insert(entry);
+				data.nextLine();
+				dates[d] = values[0];
+				d++;
 			}
-			k++;
-		}
-		searches = 0;
 
-		if (hashType.toLowerCase().equals("linear")) {
-			hash = linear;
+			int searches = keys - 1;
+			List<String> dateList = Arrays.asList(dates);
+			Collections.shuffle(dateList);
+			String[] shuffled = dateList.toArray(dates);
+			String[] searchArr = new String[keys];
+			int k = 0;
+
+			while (!(searches < 0)) {
+				if (shuffled[k] != null) {
+					searchArr[searches] = shuffled[k];
+					searches--;
+				}
+				k++;
+			}
+			searches = 0;
+
 			while (searches < keys) {
 				System.out.println(searchArr[searches]);
-				quad.find(searchArr[searches]);
-				chain.find(searchArr[searches]);
-				hash.printDateTime(searchArr[searches]);
+				table.printDateTime(searchArr[searches]);
 				searches++;
 			}
+
+			System.out.println("The load factor is: " + table.getLoadFactor());
+			System.out.println("The number of search probes is: " + table.probe);
+			System.out.println("The number of insert probes is: " + table.inserts);
+
+			data.close();
+
 		}
-		if (hashType.toLowerCase().equals("quadratic")) {
-			hash = quad;
+
+		else {
+			BufferedWriter results = new BufferedWriter(new FileWriter("Results.csv", true));
+
+			System.out.println("Specify table size: ");
+			int tableSize = Integer.parseInt(inputs.next());
+
+			System.out.println("Specify the input data file followed by the file type (e.g. cleaned_data.csv): ");
+			String file = inputs.next();
+			while (!(new File(file).exists())) {
+				System.out.println("The specified file does not exist, please try again: ");
+				file = inputs.next();
+			}
+			System.out.println("Specify the number of keys you wish to search for: ");
+			int keys = Integer.parseInt(inputs.next());
+
+			Linear linear = new Linear(tableSize);
+
+			Quadratic quad = new Quadratic(tableSize);
+
+			Chaining chain = new Chaining(tableSize);
+
+			Scanner data = new Scanner(new File(file));
+			data.nextLine();
+			data.useDelimiter(",");
+			String[] values = new String[3];
+			String[] dates = new String[600];
+			int d = 0;
+			HashEntry entry;
+
+			while (data.hasNextLine()) {
+				values[0] = data.next();
+				values[1] = data.next();
+				data.next();
+				values[2] = data.next();
+				entry = new HashEntry(values);
+				linear.insert(entry);
+				quad.insert(entry);
+				chain.insert(entry);
+				data.nextLine();
+				dates[d] = values[0];
+				d++;
+			}
+
+			String[] search = new String[keys];
+
+			int searches = keys - 1;
+			List<String> dateList = Arrays.asList(dates);
+			Collections.shuffle(dateList);
+			String[] shuffled = dateList.toArray(dates);
+			String[] searchArr = new String[keys];
+			int k = 0;
+
+			while (!(searches < 0)) {
+				if (shuffled[k] != null) {
+					searchArr[searches] = shuffled[k];
+					searches--;
+				}
+				k++;
+			}
+			searches = 0;
+
 			while (searches < keys) {
 				System.out.println(searchArr[searches]);
-				linear.find(searchArr[searches]);
-				chain.find(searchArr[searches]);
-				hash.printDateTime(searchArr[searches]);
+				System.out.print("Quadratic: ");
+				quad.printDateTime(searchArr[searches]);
+				System.out.print("Chaining: ");
+				chain.printDateTime(searchArr[searches]);
+				System.out.print("Linear: ");
+				linear.printDateTime(searchArr[searches]);
 				searches++;
 			}
+
+			double keysD = (double) keys;
+
+			System.out.println("Results: ");
+			System.out.println("Table Size: " + tableSize);
+			System.out.println("Load factors: " + linear.getLoadFactor() + "\nInserts: " + "\nLinear: "
+					+ linear.getInserts() + " Chaining: " + chain.getInserts() + " Quadratic: " + quad.getInserts()
+					+ "\nProbes: \nLinear: " + linear.getProbe() + " Chaining: " + chain.getProbe() + " Quadratic: "
+					+ quad.getProbe());
+
+			results.append(tableSize + "," + linear.getLoadFactor() + "," + linear.getInserts() + ","
+					+ quad.getInserts() + "," + chain.getInserts() + "," + linear.getProbe() + "," + quad.getProbe()
+					+ "," + chain.getProbe() + "," + (linear.getProbe() / keysD) + "," + (quad.getProbe() / keysD) + ","
+					+ (chain.getProbe() / keysD) + "," + linear.getLongProbe() + "," + quad.getLongProbe() + ","
+					+ chain.getLongProbe() + "\n");
+
+			data.close();
+			results.close();
 		}
-		if (hashType.toLowerCase().equals("chaining")) {
-			hash = chain;
-			while (searches < keys) {
-				System.out.println(searchArr[searches]);
-				quad.find(searchArr[searches]);
-				linear.find(searchArr[searches]);
-				hash.printDateTime(searchArr[searches]);
-				searches++;
-			}
-		}
 
-		System.out.println("The load factor is: " + hash.getLoadFactor());
-		System.out.println("The number of search probes is: " + hash.probe);
-		System.out.println("The number of insert probes is: " + hash.inserts);
+		// BufferedWriter results = new BufferedWriter(new FileWriter("Results.csv",
+		// true));
 
-		double keysD = (double) keys;
+		// System.out.println("Specify the input data file followed by the file type
+		// (e.g. cleaned_data.csv): ");
+		// String file = inputs.next();
+		// while (!(new File(file).exists())) {
+		// System.out.println("The specified file does not exist, please try again: ");
+		// file = inputs.next();
+		// }
+		// System.out.println("Specify the number of keys you wish to search for: ");
+		// int keys = Integer.parseInt(inputs.next());
 
-		results.append(tableSize + "," + linear.getLoadFactor() + "," + linear.inserts + "," + quad.inserts + ","
-				+ chain.inserts + "," + linear.probe + "," + quad.probe + "," + chain.probe + ","
-				+ (linear.probe / keysD) + "," + (quad.probe / keysD) + "," + (chain.probe / keysD) + ","
-				+ linear.longProbe + "," + quad.longProbe + "," + chain.longProbe + "\n");
+		// Linear linear = new Linear(tableSize);
 
-		data.close();
+		// Quadratic quad = new Quadratic(tableSize);
+
+		// Chaining chain = new Chaining(tableSize);
+
+		// Scanner data = new Scanner(new File(file));
+		// data.nextLine();
+		// data.useDelimiter(",");
+		// String[] values = new String[3];
+		// String[] dates = new String[600];
+		// int d = 0;
+		// HashEntry entry;
+
+		// while (data.hasNextLine()) {
+		// values[0] = data.next();
+		// values[1] = data.next();
+		// data.next();
+		// values[2] = data.next();
+		// entry = new HashEntry(values);
+		// linear.insert(entry);
+		// quad.insert(entry);
+		// chain.insert(entry);
+		// data.nextLine();
+		// dates[d] = values[0];
+		// d++;
+		// }
+
+		// String[] search = new String[keys];
+
+		// int searches = keys - 1;
+		// List<String> dateList = Arrays.asList(dates);
+		// Collections.shuffle(dateList);
+		// String[] shuffled = dateList.toArray(dates);
+		// String[] searchArr = new String[keys];
+		// int k = 0;
+
+		// while (!(searches < 0)) {
+		// if (shuffled[k] != null) {
+		// searchArr[searches] = shuffled[k];
+		// searches--;
+		// }
+		// k++;
+		// }
+		// searches = 0;
+
+		// if (hashType.toLowerCase().equals("linear")) {
+		// hash = linear;
+		// while (searches < keys) {
+		// System.out.println(searchArr[searches]);
+		// quad.find(searchArr[searches]);
+		// chain.find(searchArr[searches]);
+		// hash.printDateTime(searchArr[searches]);
+		// searches++;
+		// }
+		// }
+		// if (hashType.toLowerCase().equals("quadratic")) {
+		// hash = quad;
+		// while (searches < keys) {
+		// System.out.println(searchArr[searches]);
+		// linear.find(searchArr[searches]);
+		// chain.find(searchArr[searches]);
+		// hash.printDateTime(searchArr[searches]);
+		// searches++;
+		// }
+		// }
+		// if (hashType.toLowerCase().equals("chaining")) {
+		// hash = chain;
+		// while (searches < keys) {
+		// System.out.println(searchArr[searches]);
+		// quad.find(searchArr[searches]);
+		// linear.find(searchArr[searches]);
+		// hash.printDateTime(searchArr[searches]);
+		// searches++;
+		// }
+		// }
+
+		// System.out.println("The load factor is: " + hash.getLoadFactor());
+		// System.out.println("The number of search probes is: " + hash.probe);
+		// System.out.println("The number of insert probes is: " + hash.inserts);
+
+		// double keysD = (double) keys;
+
+		// results.append(tableSize + "," + linear.getLoadFactor() + "," +
+		// linear.inserts + "," + quad.inserts + ","
+		// + chain.inserts + "," + linear.probe + "," + quad.probe + "," + chain.probe +
+		// ","
+		// + (linear.probe / keysD) + "," + (quad.probe / keysD) + "," + (chain.probe /
+		// keysD) + ","
+		// + linear.longProbe + "," + quad.longProbe + "," + chain.longProbe + "\n");
+
 		inputs.close();
-		results.close();
 	}
 
 }

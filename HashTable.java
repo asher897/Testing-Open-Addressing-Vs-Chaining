@@ -12,6 +12,86 @@ public abstract class HashTable {
 	protected int currentProbe;
 	protected int currentInserts;
 
+	public HashEntry[] getHashTable() {
+		return this.hashTable;
+	}
+
+	public void setHashTable(HashEntry[] hashTable) {
+		this.hashTable = hashTable;
+	}
+
+	public void setTableSize(int tableSize) {
+		this.tableSize = tableSize;
+	}
+
+	public void setLoadFactor(double loadFactor) {
+		this.loadFactor = loadFactor;
+	}
+
+	public int getOccupied() {
+		return this.occupied;
+	}
+
+	public void setOccupied(int occupied) {
+		this.occupied = occupied;
+	}
+
+	public int getCurrentSize() {
+		return this.currentSize;
+	}
+
+	public void setCurrentSize(int currentSize) {
+		this.currentSize = currentSize;
+	}
+
+	public int getModCount() {
+		return this.modCount;
+	}
+
+	public void setModCount(int modCount) {
+		this.modCount = modCount;
+	}
+
+	public int getProbe() {
+		return this.probe;
+	}
+
+	public void setProbe(int probe) {
+		this.probe = probe;
+	}
+
+	public int getInserts() {
+		return this.inserts;
+	}
+
+	public void setInserts(int inserts) {
+		this.inserts = inserts;
+	}
+
+	public int getLongProbe() {
+		return this.longProbe;
+	}
+
+	public void setLongProbe(int longProbe) {
+		this.longProbe = longProbe;
+	}
+
+	public int getCurrentProbe() {
+		return this.currentProbe;
+	}
+
+	public void setCurrentProbe(int currentProbe) {
+		this.currentProbe = currentProbe;
+	}
+
+	public int getCurrentInserts() {
+		return this.currentInserts;
+	}
+
+	public void setCurrentInserts(int currentInserts) {
+		this.currentInserts = currentInserts;
+	}
+
 	public HashTable(int tableSize) {
 		this.tableSize = nextPrime(tableSize);
 		this.hashTable = new HashEntry[this.tableSize];
