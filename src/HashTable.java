@@ -12,86 +12,11 @@ public abstract class HashTable {
 	protected int currentProbe;
 	protected int currentInserts;
 
-	public HashEntry[] getHashTable() {
-		return this.hashTable;
-	}
-
-	public void setHashTable(HashEntry[] hashTable) {
-		this.hashTable = hashTable;
-	}
-
-	public void setTableSize(int tableSize) {
-		this.tableSize = tableSize;
-	}
-
-	public void setLoadFactor(double loadFactor) {
-		this.loadFactor = loadFactor;
-	}
-
-	public int getOccupied() {
-		return this.occupied;
-	}
-
-	public void setOccupied(int occupied) {
-		this.occupied = occupied;
-	}
-
-	public int getCurrentSize() {
-		return this.currentSize;
-	}
-
-	public void setCurrentSize(int currentSize) {
-		this.currentSize = currentSize;
-	}
-
-	public int getModCount() {
-		return this.modCount;
-	}
-
-	public void setModCount(int modCount) {
-		this.modCount = modCount;
-	}
-
-	public int getProbe() {
-		return this.probe;
-	}
-
-	public void setProbe(int probe) {
-		this.probe = probe;
-	}
-
-	public int getInserts() {
-		return this.inserts;
-	}
-
-	public void setInserts(int inserts) {
-		this.inserts = inserts;
-	}
-
-	public int getLongProbe() {
-		return this.longProbe;
-	}
-
-	public void setLongProbe(int longProbe) {
-		this.longProbe = longProbe;
-	}
-
-	public int getCurrentProbe() {
-		return this.currentProbe;
-	}
-
-	public void setCurrentProbe(int currentProbe) {
-		this.currentProbe = currentProbe;
-	}
-
-	public int getCurrentInserts() {
-		return this.currentInserts;
-	}
-
-	public void setCurrentInserts(int currentInserts) {
-		this.currentInserts = currentInserts;
-	}
-
+	/**
+	 * Constructor for the HashTable
+	 * 
+	 * @param tableSize The table size of the Hash Table.
+	 */
 	public HashTable(int tableSize) {
 		this.tableSize = nextPrime(tableSize);
 		this.hashTable = new HashEntry[this.tableSize];
@@ -118,7 +43,7 @@ public abstract class HashTable {
 	}
 
 	/**
-	 * calculates the load factor of the current HashTable
+	 * Calculates the load factor of the current HashTable
 	 * 
 	 * @return a String value of the load factor by dividing the current occupation
 	 *         of the HashTable by the table size.
@@ -131,7 +56,7 @@ public abstract class HashTable {
 	}
 
 	/**
-	 * gives the table size of the HashTable.
+	 * Gives the table size of the HashTable.
 	 * 
 	 * @return an int value of the table size.
 	 */
@@ -152,7 +77,7 @@ public abstract class HashTable {
 	}
 
 	/**
-	 * calculates the HashCode of a String by mulriplying each character of the
+	 * Calculates the HashCode of a String by mulriplying each character of the
 	 * string by 31 and adding it to the hash value.
 	 * 
 	 * @param hashData the String for which the HashCode is calculated.
@@ -171,18 +96,64 @@ public abstract class HashTable {
 	}
 
 	/**
-	 * abtract method for insert to be defined in sub concrete classes.
+	 * Abtract method for insert to be defined in sub concrete classes.
 	 */
 	public abstract void insert(HashEntry data) throws Exception;
 
 	/**
-	 * abtract method for find to be defined in sub concrete classes.
+	 * Abtract method for find to be defined in sub concrete classes.
 	 */
 	public abstract int find(String date) throws Exception;
 
 	/**
-	 * abtract method for printDateTime to be defined in sub concrete classes.
+	 * Abtract method for printDateTime to be defined in sub concrete classes.
 	 */
 	public abstract void printDateTime(String date) throws Exception;
+
+	// Getters and setters
+
+	public HashEntry[] getHashTable() {
+		return this.hashTable;
+	}
+
+	public void setTableSize(int tableSize) {
+		this.tableSize = tableSize;
+	}
+
+	public void setLoadFactor(double loadFactor) {
+		this.loadFactor = loadFactor;
+	}
+
+	public int getOccupied() {
+		return this.occupied;
+	}
+
+	public int getCurrentSize() {
+		return this.currentSize;
+	}
+
+	public int getModCount() {
+		return this.modCount;
+	}
+
+	public int getProbe() {
+		return this.probe;
+	}
+
+	public int getInserts() {
+		return this.inserts;
+	}
+
+	public int getLongProbe() {
+		return this.longProbe;
+	}
+
+	public int getCurrentProbe() {
+		return this.currentProbe;
+	}
+
+	public int getCurrentInserts() {
+		return this.currentInserts;
+	}
 
 }

@@ -2,12 +2,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
-import java.nio.file.*;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
-import java.io.IOException;
 
 public class Main {
 	public static void main(String[] args) throws Exception {
@@ -123,8 +120,6 @@ public class Main {
 				d++;
 			}
 
-			String[] search = new String[keys];
-
 			int searches = keys - 1;
 			List<String> dateList = Arrays.asList(dates);
 			Collections.shuffle(dateList);
@@ -156,7 +151,7 @@ public class Main {
 
 			System.out.println("Results: ");
 			System.out.println("Table Size: " + tableSize);
-			System.out.println("Load factors: " + linear.getLoadFactor() + "\nInserts: " + "\nLinear: "
+			System.out.println("Load factor: " + linear.getLoadFactor() + "\nInserts: " + "\nLinear: "
 					+ linear.getInserts() + " Chaining: " + chain.getInserts() + " Quadratic: " + quad.getInserts()
 					+ "\nProbes: \nLinear: " + linear.getProbe() + " Chaining: " + chain.getProbe() + " Quadratic: "
 					+ quad.getProbe());
