@@ -26,6 +26,10 @@ public class Main {
 		}
 		System.out.println("Specify the input data file followed by the file type (e.g. cleaned_data.csv): ");
 		String file = inputs.next();
+		while (!(new File(file).exists())) {
+			System.out.println("The specified file does not exist, please try again: ");
+			file = inputs.next();
+		}
 		System.out.println("Specify the number of keys you wish to search for: ");
 		int keys = Integer.parseInt(inputs.next());
 
